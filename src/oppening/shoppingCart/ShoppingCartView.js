@@ -1,0 +1,3 @@
+class CShoppingCart {
+    // тело класса
+}

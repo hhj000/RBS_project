@@ -1,0 +1,3 @@
+class CEmployeeTab {
+    // тело класса
+}
