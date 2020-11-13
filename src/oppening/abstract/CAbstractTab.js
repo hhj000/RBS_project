@@ -1,0 +1,3 @@
+class CAbstractTab {
+    // тело класса
+}

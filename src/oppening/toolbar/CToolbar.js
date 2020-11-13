@@ -1,0 +1,3 @@
+class CToolbar {
+    // тело класса
+}

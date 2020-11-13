@@ -1,0 +1,3 @@
+class CCategoryTab {
+    // тело класса
+}

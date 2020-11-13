@@ -1,0 +1,3 @@
+class CConcreteTab {
+    // тело класса
+}
