@@ -7,7 +7,7 @@ import { CShoppingCart } from './shoppingCart/CShoppingCart.js'
 import { CToolbar } from './toolbar/CToolbar.js'
 import { CTransactionTab } from './transaction/CTransactionTab.js'
 
-
+//КУКИ РАЗОБРАТЬ!
 //import { deleteCookie } from '../../helpers/cookies.js'
 //import { checkAuth } from '../../helpers/checkAuth.js'
 //import WorkedPlaceView from './ApplicationView.js'
@@ -15,7 +15,6 @@ import { CTransactionTab } from './transaction/CTransactionTab.js'
 export class Application {
     constructor() {
         this.view                               // быстрый доступ к объектам представлений
-        
 		this.userInfo = new CToolbar()				//экземпляр контроллера пользовательской информации 
 		this.abstractTab = new CAbstractTab()		//экземпляр контроллера абстрактных товаров
 		this.categoryTab = new CCategoryTab()		//экземпляр контроллера конкретных товаров
@@ -30,7 +29,7 @@ export class Application {
     // метод инициализации главного компонента
     init() {//данный метод ещё не рассмотрен и не осознан. Пока что он пуст
 	
-		/*
+		
         // инициализация компонента информации о пользователе
         this.userInfo.init(
             () => {
@@ -38,28 +37,57 @@ export class Application {
                 location.replace('/user/logout')
             }, // onLogout
         )
+		
+		this.concreteTab.init(
+            //() => { return this.journalTab.refreshTable() }, // updateEvent
+            (config) => { this.refreshControlls(config) }, // refreshControlls
+        )
+		
         // инициализация компонента вкладки книг
-        this.bookTab.init(
+        
+		this.abstractTab.init(
+            () => { return this.concreteTab.refreshTable() }, // updateEvent
+            //() => { return this.journalTab.refreshTable() }, // updateEvent
+            (config) => { this.refreshControlls(config) }, // refreshControlls
+        )
+		
+		this.categoryTab.init(
+  			() => { return this.concreteTab.refreshTable() }, // updateEvent
+			() => { return this.abstractTab.refreshTable() }, // updateEvent
+			//() => { return this.journalTab.refreshTable() }, // updateEvent
+            (config) => { this.refreshControlls(config) }, // refreshControlls
+        )
+		
+		this.employeeTab.init(
+            //() => { return this.dispatch(APP_TAB.booksTab) }, // toBook
+            //() => { return this.dispatch(APP_TAB.journalTab) }, // toEvent
+            () => { return this.transactionTab.refreshTable() }, // updateEventsDatatable
+            (config) => { this.refreshControlls(config) }, // refreshControlls
+        )
+		
+		
+		this.shoppingCart.init(
+            //() => { return this.journalTab.refreshTable() }, // updateEvent
+            (config) => { this.refreshControlls(config) }, // refreshControlls
+        )
+		
+		this.bookTab.init(
             () => { return this.journalTab.refreshTable() }, // updateEvent
             (config) => { this.refreshControlls(config) }, // refreshControlls
         )
+		
         // инициализация компонента вкладки сотрудников
-        this.employeeTab.init(
-            () => { return this.dispatch(APP_TAB.booksTab) }, // toBook
-            () => { return this.dispatch(APP_TAB.journalTab) }, // toEvent
-            () => { return this.journalTab.refreshTable() }, // updateEventsDatatable
-            () => { return this.bookTab.refreshTable() }, // updateBooksDatatable
-            (config) => { this.refreshControlls(config) }, // refreshControlls
-        )
+        
         // инициализация компонента вкладки событий
-        this.journalTab.init(
+        this.transactionTab.init(
             () => { return this.dispatch(APP_TAB.booksTab) }, // toBook
             () => { return this.dispatch(APP_TAB.employeesTab) }, // toEvent
             (config) => { this.refreshControlls(config) }, // refreshControlls
         )
-        // инициализация компонента окна входа в приложение
+        
+		// инициализация компонента окна входа в приложение
         this.mainWindow.init(
             () => { location.replace('/') }, // onLogin
         )
-		*/
+		
     }

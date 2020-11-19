@@ -1,65 +1,56 @@
-import { CAbstractTab } from './abstrac/CAbstractTab.js'
-import { CCategoryTab } from './category/CCategoryTab.js'
-import { CConcreteTab } from './concrete/CConcreteTab.js'
-import { CEmployeeTab } from './employee/CEmployeeTab.js'
-import { CMainWindow } from './mainWindow/CMainWindow.js'
-import { CShoppingCart } from './shoppingCart/CShoppingCart.js'
-import { CToolbar } from './toolbar/CToolbar.js'
-import { CTransactionTab } from './transaction/CTransactionTab.js'
+// возвращает webix конфигурацию рабочего пространства приложения
+export default function WorkedPlaceView(bookTab, employeeTab, journalTab, userInfo) {
+    return {
+        id: 'workedPlace',
+        rows: [
+            // header
+            userInfo.config(),
+            {
+                id: 'main',
+                cols: [
+                    {
+                        view: 'tabbar',
+                        id: 'main-tabbar',
+                        value: 'listView',
+                        width: 600,
+                        multiview: true,
+                        options: [
+                            { id: 'abstractTab', value: 'Сотрудники' },
+                            { id: 'categoryTab', value: 'Транзакции' },
+                            { id: 'concreteTab', value: 'Товары' },
+							{ id: 'employeeTab', value: 'Экземпляры' },
+							{ id: 'shoppingCart', value: 'Категории' },
+							{ id: 'transactionTab', value: 'Категории' }
+                        ]
 
-
-//import { deleteCookie } from '../../helpers/cookies.js'
-//import { checkAuth } from '../../helpers/checkAuth.js'
-//import WorkedPlaceView from './ApplicationView.js'
-// галвный компонент приложения
-export class Application {
-    constructor() {
-        this.view                               // быстрый доступ к объектам представлений
-        
-		this.userInfo = new CToolbar()				//экземпляр контроллера пользовательской информации 
-		this.abstractTab = new CAbstractTab()		//экземпляр контроллера абстрактных товаров
-		this.categoryTab = new CCategoryTab()		//экземпляр контроллера конкретных товаров
-		this.concreteTab = new CConcreteTab()		//экземпляр контроллера экземпляров товаров
-		this.employeeTab = new CEmployeeTab()		//экземпляр контроллера сотрудников
-		this.mainWindow = new CMainWindow()			//окно входа в приложение
-		this.shoppingCart = new CShoppingCart()		//окно корзины
-		this.transactionTab = new CTransactionTab()	//экземпляр контроллера транзакий
-		
+                    },
+                    {},
+                    {
+                        id: 'tab-controlls',
+                        rows: [
+                            abstractTab.configTabControlls(),
+                            categoryTab.configTabControlls(),
+                            concreteTab.configTabControlls(),
+							employeeTab.configTabControlls(),
+							shoppingCart.configTabControlls(),
+							transactionTab.configTabControlls(),
+                        ]
+                    }, // элементы управления табов
+                ],
+            },
+            // содержимое табов
+            {
+                view: 'multiview',
+                id: 'main-views',
+                cells: [
+                    abstractTab.config(),
+                    categoryTab.config(),
+                    concreteTab.config(),
+					employeeTab.config(),
+					shoppingCart.config(),
+					transactionTab.config()
+                ]
+            },
+        ],
     }
-
-    // метод инициализации главного компонента
-    init() {//данный метод ещё не рассмотрен и не осознан. Пока что он пуст
-	
-		/*
-        // инициализация компонента информации о пользователе
-        this.userInfo.init(
-            () => {
-                deleteCookie('auth-token')
-                location.replace('/user/logout')
-            }, // onLogout
-        )
-        // инициализация компонента вкладки книг
-        this.bookTab.init(
-            () => { return this.journalTab.refreshTable() }, // updateEvent
-            (config) => { this.refreshControlls(config) }, // refreshControlls
-        )
-        // инициализация компонента вкладки сотрудников
-        this.employeeTab.init(
-            () => { return this.dispatch(APP_TAB.booksTab) }, // toBook
-            () => { return this.dispatch(APP_TAB.journalTab) }, // toEvent
-            () => { return this.journalTab.refreshTable() }, // updateEventsDatatable
-            () => { return this.bookTab.refreshTable() }, // updateBooksDatatable
-            (config) => { this.refreshControlls(config) }, // refreshControlls
-        )
-        // инициализация компонента вкладки событий
-        this.journalTab.init(
-            () => { return this.dispatch(APP_TAB.booksTab) }, // toBook
-            () => { return this.dispatch(APP_TAB.employeesTab) }, // toEvent
-            (config) => { this.refreshControlls(config) }, // refreshControlls
-        )
-        // инициализация компонента окна входа в приложение
-        this.mainWindow.init(
-            () => { location.replace('/') }, // onLogin
-        )
-		*/
-    }
+}
