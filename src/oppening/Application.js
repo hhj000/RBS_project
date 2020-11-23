@@ -27,7 +27,7 @@ export class Application {
     }
 
     // метод инициализации главного компонента
-    init() {//данный метод ещё не рассмотрен и не осознан. Пока что он пуст
+    init() {
 	
 		
         // инициализация компонента информации о пользователе
@@ -40,27 +40,47 @@ export class Application {
 		
 		this.concreteTab.init(
             //() => { return this.journalTab.refreshTable() }, // updateEvent
-            (config) => { this.refreshControlls(config) }, // refreshControlls
+            () => { return this.dispatch(APP_TAB.abstractTab) }, // toBook
+            () => { return this.dispatch(APP_TAB.categoryTab) }, // toEvent
+			() => { return this.dispatch(APP_TAB.employeeTab) },
+			() => { return this.dispatch(APP_TAB.transactionTab) }
+			
+			
+			(config) => { this.refreshControlls(config) }, // refreshControlls
         )
 		
         // инициализация компонента вкладки книг
         
 		this.abstractTab.init(
+			() => { return this.dispatch(APP_TAB.concreteTab) }, // toBook
+            () => { return this.dispatch(APP_TAB.categoryTab) }, // toEvent
+			() => { return this.dispatch(APP_TAB.employeeTab) },
+			() => { return this.dispatch(APP_TAB.transactionTab) }
+			
+		
             () => { return this.concreteTab.refreshTable() }, // updateEvent
-            //() => { return this.journalTab.refreshTable() }, // updateEvent
             (config) => { this.refreshControlls(config) }, // refreshControlls
         )
 		
 		this.categoryTab.init(
+			() => { return this.dispatch(APP_TAB.concreteTab) }, // toBook
+            () => { return this.dispatch(APP_TAB.abstractTab) }, // toEvent
+			() => { return this.dispatch(APP_TAB.employeeTab) },
+			() => { return this.dispatch(APP_TAB.transactionTab) }
+			
+		
   			() => { return this.concreteTab.refreshTable() }, // updateEvent
 			() => { return this.abstractTab.refreshTable() }, // updateEvent
-			//() => { return this.journalTab.refreshTable() }, // updateEvent
             (config) => { this.refreshControlls(config) }, // refreshControlls
         )
 		
 		this.employeeTab.init(
-            //() => { return this.dispatch(APP_TAB.booksTab) }, // toBook
-            //() => { return this.dispatch(APP_TAB.journalTab) }, // toEvent
+			//какое окно надо 
+            () => { return this.dispatch(APP_TAB.concreteTab) }, // toBook
+            () => { return this.dispatch(APP_TAB.abstractTab) }, // toEvent
+			() => { return this.dispatch(APP_TAB.categoryTab) },
+			() => { return this.dispatch(APP_TAB.transactionTab) }
+			
             () => { return this.transactionTab.refreshTable() }, // updateEventsDatatable
             (config) => { this.refreshControlls(config) }, // refreshControlls
         )
@@ -68,18 +88,19 @@ export class Application {
 		
 		this.shoppingCart.init(
             //() => { return this.journalTab.refreshTable() }, // updateEvent
-            (config) => { this.refreshControlls(config) }, // refreshControlls
-        )
-		
-		this.bookTab.init(
-            () => { return this.journalTab.refreshTable() }, // updateEvent
-            (config) => { this.refreshControlls(config) }, // refreshControlls
+            
+			(config) => { this.refreshControlls(config) }, // refreshControlls
         )
 		
         // инициализация компонента вкладки сотрудников
         
         // инициализация компонента вкладки событий
         this.transactionTab.init(
+			() => { return this.dispatch(APP_TAB.abstractTab) }, // toBook
+            () => { return this.dispatch(APP_TAB.categoryTab) }, // toEvent
+			() => { return this.dispatch(APP_TAB.employeeTab) },
+			() => { return this.dispatch(APP_TAB.concreteTab) }
+			
             () => { return this.dispatch(APP_TAB.booksTab) }, // toBook
             () => { return this.dispatch(APP_TAB.employeesTab) }, // toEvent
             (config) => { this.refreshControlls(config) }, // refreshControlls
