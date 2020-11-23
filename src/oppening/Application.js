@@ -111,4 +111,38 @@ export class Application {
             () => { location.replace('/') }, // onLogin
         )
 		
-    }
+    }//Windows 7 (на /dev/sda2)
+	//etc/default/grub
+	 dispatch(tab) {
+        let tabObj
+
+        // определение объекта таба
+        switch (tab) {
+            case APP_TAB.concreteTab:
+                tabObj = this.concreteTab
+                break
+            case APP_TAB.abstractTab:
+                tabObj = this.abstractTab
+                break
+            case APP_TAB.categoryTab:
+                tabObj = this.categoryTab
+                break
+			case APP_TAB.employeeTab:
+                tabObj = this.employeeTab
+                break
+			case APP_TAB.transactionTab:
+                tabObj = this.transactionTab
+                break
+            default:
+                console.error('Incorrect tab: ', tab)
+                return
+        }
+
+// константы перечисления табов(id представления)
+export const APP_TAB = {
+    concreteTab: 'concreteTab',
+    abstractTab: 'abstractTab',
+    categoryTab: 'categoryTab',
+	employeeTab: 'employeeTab',
+	transactionTab: 'transactionTab',
+}
