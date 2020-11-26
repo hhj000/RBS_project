@@ -1,4 +1,4 @@
-import { AbstractTab,/* BookTabContextMenu,*/ TabControllsView } from './AbstractTab.js'
+import { AbstractTabView, AbstractTabContextMenu, TabControllsView } from './AbstractTab.js'
 import { AbstractTabWindow, Abstract_WINDOW_TYPE } from './AbstractWindow/CAbstractWindow.js'
 
 import abstractModel from '../../models/abstractModel.js'
