@@ -50,8 +50,8 @@ export class CAbstractTab {
     attachEvents() {
         // инициализация используемых представлений
         this.view = {
-            datatable: $$('AbstractTabDatatable'),
-            datatableContextMenu: $$('AbstractTabDatatableContextMenu'),
+            datatable: $$('abstractTabDatatable'),
+            datatableContextMenu: $$('abstractTabDatatableContextMenu'),
             controlls: $$('abstracttab-controlls'),
             btns: {
                 createBtn: $$('abstracttab-add-btn'),
