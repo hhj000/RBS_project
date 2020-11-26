@@ -1,11 +1,14 @@
 import { AbstractTab,/* BookTabContextMenu,*/ TabControllsView } from './AbstractTab.js'
-import { CBookWindow, BOOK_WINDOW_TYPE } from './bookWindow/CBookWindow.js'
-import bookModel from '../../models/bookModel.js'
-import eventModel from '../../models/eventModel.js'
-import employeeModel from '../../models/employeeModel.js'
-import { Book, BOOK_STATUS } from '../../models/entities/book.js'
+import { AbstractTabWindow, Abstract_WINDOW_TYPE } from './AbstractWindow/CAbstractWindow.js'
 
-// класс таба 'Книги'
+import abstractModel from '../../models/abstractModel.js'
+import categoryModel from '../../models/categoryModel.js'
+import concreteModel from '../../models/concreteModel.js'
+import employeeModel from '../../models/employeeModel.js'
+import shoppingCartModel from '../../models/shoppingCartModel.js'
+import transactionModel from '../../models/transactionModel.js'
+
+// класс таба 'Абстрактные товары'
 export class CAbstractTab {
     constructor() {
         this.refreshControlls       // функция обновления элементов управления в header'е
@@ -20,7 +23,7 @@ export class CAbstractTab {
         this.updateEventsDatatable = updateEventsDatatable  // функция обновления таблицы событий
         this.refreshControlls = refreshControlls            // функция обновления элементов управления в header'е
 
-        this.window = new CBookWindow() // инициализация компонента окна
+        this.window = new CAbstractWindow() // инициализация компонента окна
         this.window.init(
             () => { this.refreshTable() }
         ) // вызова инициализации компонента окна
@@ -32,10 +35,10 @@ export class CAbstractTab {
     config() {
         // т.к. window и popup расположены не в дереве приложения, а поверх слоев, его нужно отрисовывать отдельно
         webix.ui(this.window.config())
-        webix.ui(BookTabContextMenu(this.names))
+        webix.ui(AbstractTabContextMenu(this.names))
 
         // вызов функции представления
-        return BookTabView()
+        return AbstractTabView()
     }
 
     // метод получения webix конфигурации элементов управления таба
@@ -47,29 +50,29 @@ export class CAbstractTab {
     attachEvents() {
         // инициализация используемых представлений
         this.view = {
-            datatable: $$('bookTabDatatable'),
-            datatableContextMenu: $$('bookTabDatatableContextMenu'),
-            controlls: $$('booktab-controlls'),
+            datatable: $$('AbstractTabDatatable'),
+            datatableContextMenu: $$('AbstractTabDatatableContextMenu'),
+            controlls: $$('abstracttab-controlls'),
             btns: {
-                createBtn: $$('booktab-add-btn'),
-                updateBtn: $$('booktab-edit-btn'),
-                deleteBtn: $$('booktab-remove-btn'),
+                createBtn: $$('abstracttab-add-btn'),
+                updateBtn: $$('abstracttab-edit-btn'),
+                deleteBtn: $$('abstracttab-remove-btn'),
             }
         }
 
-        // создание книги
+        // создание абстрактного товара
         this.view.btns.createBtn.attachEvent('onItemClick', () => {
-            this.createBook()
+            this.createAbstract()
         })
 
-        // изменение книги
+        // изменение абстрактного товара
         this.view.btns.updateBtn.attachEvent('onItemClick', () => {
-            this.updateBook()
+            this.updateAbstract()
         })
 
-        // удаление книги
+        // удаление абстрактного товара
         this.view.btns.deleteBtn.attachEvent('onItemClick', () => {
-            this.deleteBook()
+            this.deleteAbstract()
         })
 
         // отложенное заполнение массива сотрудников в сабменю
@@ -110,31 +113,31 @@ export class CAbstractTab {
     // обработка выбора в контекстном меню
     handleContextMenu(item) {
         switch (item) {
-            case BOOK_CONTEXT_MENU.edit: // редактирование выделленой книгиbreak
-                this.updateBook()
+            case ABSTRACT_CONTEXT_MENU.edit: // редактирование выделленой книгиbreak
+                this.updateAbstract()
                 break
-            case BOOK_CONTEXT_MENU.remove: // удаление выделенной книгиbreak
-                this.deleteBook()
+            case ABSTRACT_CONTEXT_MENU.remove: // удаление выделенной книгиbreak
+                this.deleteAbstract()
                 break
-            case BOOK_CONTEXT_MENU.take: // добавление книги
+            case ABSTRACT_CONTEXT_MENU.take: // добавление книги
                 // получение выделенного элемента
-                let book = this.view.datatable.getSelectedItem()
-                if (!book) {
+                let abstract = this.view.datatable.getSelectedItem()
+                if (!abstract) {
                     webix.message('Выделите строку')
                     return
                 }
-                if (!book.ID) {
-                    console.error('Incorrect ID of item:', book.ID)
+                if (!abstract.ID) {
+                    console.error('Incorrect ID of item:', abstract.ID)
                     return
                 }
 
                 // проверка статуса книги
-                if (book.status === BOOK_STATUS.available) {
+                if (abstract.status === ABSTRACT_STATUS.available) {
                     webix.message('Книга не выдана')
                     return
                 }
 
-                eventModel.createTakeEvent(book.ID).then(() => {
+                eventModel.createTakeEvent(abstract.ID).then(() => {
                     this.refreshTable()
                 })
                 break
@@ -147,72 +150,72 @@ export class CAbstractTab {
     // обработка выбора в submenu
     handleSubMenu(empItem) {
         // получения сотрудника из submenu
-        let submenu = $$(this.view.datatableContextMenu.getItem(BOOK_CONTEXT_MENU.give).submenu)
+        let submenu = $$(this.view.datatableContextMenu.getItem(ABSTRACT_CONTEXT_MENU.give).submenu)
         let employee = submenu.getItem(empItem)
 
         // получение выделенного элемента
-        let book = this.view.datatable.getSelectedItem()
-        if (!book) {
+        let abstract = this.view.datatable.getSelectedItem()
+        if (!abstract) {
             webix.message('Выделите строку')
             return
         }
-        if (!book.ID) {
-            console.error('Incorrect ID of item:', book.ID)
+        if (!abstract.ID) {
+            console.error('Incorrect ID of item:', abstract.ID)
             return
         }
 
         // проверка статуса книги
-        if (book.status === BOOK_STATUS.notAvailable) {
+        if (abstract.status === ABSTRACT_STATUS.notAvailable) {
             webix.message('Книга уже выдана')
             return
         }
 
-        eventModel.createGiveEvent(book.ID, employee.ID).then(() => {
+        eventModel.createGiveEvent(abstract.ID, employee.ID).then(() => {
             this.refreshTable()
             this.updateEventsDatatable()
         })
     }
 
-    // функция обновления таблицы книг
-    refreshTable(books) {
-        if (books) {
+    // функция обновления таблицы абстрактных товаров
+    refreshTable(abstracts) {
+        if (abstracts) {
             this.view.datatable.clearAll()
-            this.view.datatable.parse(books)
+            this.view.datatable.parse(abstracts)
             return
         } else {
-            bookModel.getBooks().then((books) => {
+            abstractModel.getAbstracts().then((abstracts) => {
                 // проверка наличия данных
-                if (books) {
+                if (abstracts) {
                     // преобразование даты издания
-                    books.map((book) => {
-                        book.year = new Date(book.year)
+                    abstracts.map((abstract) => {
+                        abstract.year = new Date(abstract.year)
                     })
                 }
 
                 // заполнение таблицы окна данными книги
                 this.view.datatable.clearAll()
-                this.view.datatable.parse(books)
+                this.view.datatable.parse(abstracts)
             })
         }
     }
 
     // метод отображения таба с фильтрацией по книге
-    showByBookID(bookID) {
-        bookModel.getBookByID(bookID).then((book) => {
+    showByAbstractID(abstractID) {
+        abstractModel.getBookByID(abstractID).then((abstract) => {
             // проверка наличия данных
-            if (!book) {
+            if (!abstract) {
                 return
             }
 
             // применение фильтров
-            this.view.datatable.getFilter('ISBN').value = book.ISBN
+            this.view.datatable.getFilter('ISBN').value = abstract.ISBN
             this.view.datatable.filterByAll()
 
             // выделение нужной строки
             for (let rowID = 0; rowID < this.view.datatable.serialize().length; rowID++) {
                 let item = this.view.datatable.serialize()[rowID]
 
-                if (item.ID === bookID) {
+                if (item.ID === abstractID) {
                     this.view.datatable.select(item.id)
                     break
                 }
@@ -243,13 +246,13 @@ export class CAbstractTab {
     }
 
     // функция создания книги
-    createBook() {
-        this.window.parse(new Book())
-        this.window.switch(BOOK_WINDOW_TYPE.create)
+    createAbstract() {
+        this.window.parse(new abstract())
+        this.window.switch(ABSTRACT_WINDOW_TYPE.create)
     }
 
     // функция изменения книги
-    updateBook() {
+    updateAbstract() {
         // получение выделенного элемента
         let selected = this.view.datatable.getSelectedItem()
 
@@ -263,24 +266,24 @@ export class CAbstractTab {
             console.error('Incorrect ID of item:', selected.ID)
             return
         }
-        bookModel.getBookByID(selected.ID).then((book) => {
+        abstractModel.getBookByID(selected.ID).then((abstract) => {
             // проверка наличия данных
-            if (!book) {
+            if (!abstract) {
                 return
             }
 
             // преобразование даты издания
-            let time = new Date(book.year)
-            book.year = time.getFullYear()
+            let time = new Date(abstract.year)
+            abstract.year = time.getFullYear()
 
             // заполнение полей окна данными книги
-            this.window.parse(book)
-            this.window.switch(BOOK_WINDOW_TYPE.update)
+            this.window.parse(abstract)
+            this.window.switch(ABSTRACT_WINDOW_TYPE.update)
         })
     }
 
     // функция удаления книги
-    deleteBook() {
+    deleteAbstract() {
         // получение выделенного элемента
         let selected = this.view.datatable.getSelectedItem()
 
@@ -292,30 +295,30 @@ export class CAbstractTab {
             console.error('id of item is ', selected.ID)
             return
         }
-        bookModel.getBookByID(selected.ID).then((book) => {
+        abstractModel.getBookByID(selected.ID).then((abstract) => {
             // проверка наличия данных
-            if (!book) {
+            if (!abstract) {
                 return
             }
             // проверка выданности книги
-            if (book.status === BOOK_STATUS.notAvailable) {
+            if (abstract.status === ABSTRACT_STATUS.notAvailable) {
                 webix.message('Нельзя удалить выданную книгу')
                 return
             }
 
             // преобразование даты издания
-            let time = new Date(book.year)
-            book.year = time.getFullYear()
+            let time = new Date(abstract.year)
+            abstract.year = time.getFullYear()
 
             // заполнение полей окна данными книги
-            this.window.parse(book)
-            this.window.switch(BOOK_WINDOW_TYPE.delete)
+            this.window.parse(abstract)
+            this.window.switch(ABSTRACT_WINDOW_TYPE.delete)
         })
     }
 }
 
 // допустимые значения пунктов контекстного меню таба Книги
-export const BOOK_CONTEXT_MENU = {
+export const ABSTRACT_CONTEXT_MENU = {
     give: 'Выдать',
     add: 'Добавить',
     edit: 'Изменить',

@@ -28,7 +28,6 @@ export class Application {
 
     // метод инициализации главного компонента
     init() {
-	
 		
         // инициализация компонента информации о пользователе
         this.userInfo.init(
@@ -113,6 +112,61 @@ export class Application {
 		
     }//Windows 7 (на /dev/sda2)
 	//etc/default/grub
+	
+	// метод вызова обработки событий
+    attachEvents() {
+        this.view = {
+            tabbar: $$('main-tabbar'),
+            multiviews: $$('main-views'),
+            workedPlace: $$('workedPlace'),
+            tabControllsContainer: $$('main'),
+        }
+
+        // компоненты требующие авторизации
+        // вызываются через проверку авторизации
+        // если клиент не авторизован, то эти
+        // компоненты не будут отрисованы
+        checkAuth((isAuth) => {
+            if (isAuth) {
+                // переключение таба
+                this.view.tabbar.attachEvent('onItemClick', () => {
+                    this.dispatch(this.view.tabbar.getValue())
+                })
+
+                // отрисовать рабочее пространство
+                this.view.workedPlace.show()
+
+                // обработчики событий компонентов
+                this.userInfo.attachEvents()
+                this.concreteTab.attachEvents()
+				this.abstractTab.attachEvents()
+				this.categoryTab.attachEvents()
+                this.employeeTab.attachEvents()
+                this.transactionTab.attachEvents()
+
+                // выделить таб книг
+                this.dispatch(APP_TAB.booksTab)
+            } else {
+                this.view.workedPlace.hide()
+            }
+        })
+
+        // вызов обработки событий окна входа в приложение
+        this.mainWindow.attachEvents()
+
+        // первоночальное состояние приложения
+        this.view.workedPlace.hide()
+        this.mainWindow.switch()
+    }
+
+    // метод отрисовки главной конфигурации представления
+    config() {
+        webix.ui(this.mainWindow.config())
+
+        return WorkedPlaceView(this.bookTab, this.employeeTab, this.journalTab, this.userInfo)
+    }
+	
+	
 	 dispatch(tab) {
         let tabObj
 
