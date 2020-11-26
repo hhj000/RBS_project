@@ -295,7 +295,7 @@ export class CAbstractTab {
             console.error('id of item is ', selected.ID)
             return
         }
-        abstractModel.getBookByID(selected.ID).then((abstract) => {
+        abstractModel.getAbstractByID(selected.ID).then((abstract) => {
             // проверка наличия данных
             if (!abstract) {
                 return
