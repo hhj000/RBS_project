@@ -1,13 +1,13 @@
-import { ABSTRACT_CONTEXT_MENU } from './CAbstractTab.js';
+import { CATEGORY_CONTEXT_MENU } from './CCategoryTab.js';
 
 // возвращает webix конфигурацию таба для работы с книгами
-export function AbstractTabView() {
+export function CategoryTabView() {
     return {
-        id: 'abstractTab',
+        id: 'categoryTab',
         rows: [
             {
                 view: 'datatable',
-                id: 'abstractTabDatatable',
+                id: 'categoryTabDatatable',
                 select: true,
                 columns: [
                     { id: 'ID', header: ['', { content: 'textFilter' }], hidden: true },
@@ -26,18 +26,18 @@ export function AbstractTabView() {
 }
 
 // возвращает webix конфигурацию контекстного меню таба
-export function AbstractTabContextMenu(employees) {
+export function CategoryTabContextMenu(employees) {
     return {
         view: 'contextmenu',
-        id: 'abstractTabDatatableContextMenu',
+        id: 'categoryTabDatatableContextMenu',
         data: [
             {
-                value: ABSTRACT_CONTEXT_MENU.give,
-                id: ABSTRACT_CONTEXT_MENU.give,
+                value: CATEGORY_CONTEXT_MENU.give,
+                id: CATEGORY_CONTEXT_MENU.give,
                 submenu: employees,
             },
-            ABSTRACT_CONTEXT_MENU.edit,
-            ABSTRACT_CONTEXT_MENU.remove
+            CATEGORY_CONTEXT_MENU.edit,
+            CATEGORY_CONTEXT_MENU.remove
         ],
     }
 }
@@ -45,25 +45,25 @@ export function AbstractTabContextMenu(employees) {
 // элементы управления для таба
 export function TabControllsView() {
     return {
-        id: 'abstractTab-controlls',
+        id: 'categoryTab-controlls',
         hidden: true,
         cols: [
             {
-                id: 'abstractTab-add-btn',
+                id: 'categoryTab-add-btn',
                 view: 'icon',
                 tooltip: 'Добавить',
                 icon: 'plus',
                 width: 30,
             },
             {
-                id: 'abstractTab-edit-btn',
+                id: 'categoryTab-edit-btn',
                 view: 'icon',
                 tooltip: 'Редактировать',
                 icon: 'pencil',
                 width: 30,
             },
             {
-                id: 'abstractTab-remove-btn',
+                id: 'categoryTab-remove-btn',
                 view: 'icon',
                 tooltip: 'Удалить',
                 icon: 'trash',

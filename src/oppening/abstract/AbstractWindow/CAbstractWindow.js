@@ -31,10 +31,10 @@ export class CAbstractWindow {
             formfields: {
                 ISBN: $$('abstractWindowFormISBN'),
                 name: $$('abstractWindowFormName'),
-                author: $$('abstractWindowFormAuthor'),
-                publisher: $$('abstractWindowFormPublisher'),
+                cost: $$('abstractWindowFormAuthor'),
+                cost: $$('abstractWindowFormPublisher'),
                 status: $$('abstractWindowFormStatus'),
-                year: $$('abstractWindowFormYear'),
+                warranty: $$('abstractWindowFormYear'),
             }
         }
 
@@ -101,10 +101,10 @@ export class CAbstractWindow {
                 this.view.windowLabel.setHTML('Удаление книги')
                 this.view.formfields.ISBN.disable()
                 this.view.formfields.name.disable()
-                this.view.formfields.author.disable()
-                this.view.formfields.publisher.disable()
+                this.view.formfields.cost.disable()
+                this.view.formfields.count.disable()
                 this.view.formfields.status.disable()
-                this.view.formfields.year.disable()
+                this.view.formfields.warranty.disable()
                 this.view.window.resize()
                 break;
             default:
@@ -139,9 +139,9 @@ export class CAbstractWindow {
         this.view.formfields.ISBN.setValue(this.view.formfields.ISBN.getValue().trim())
         this.view.formfields.ISBN.setValue(this.view.formfields.ISBN.getValue().replace(/-/g, ''))
         this.view.formfields.name.setValue(this.view.formfields.name.getValue().trim())
-        this.view.formfields.author.setValue(this.view.formfields.author.getValue().trim())
-        this.view.formfields.publisher.setValue(this.view.formfields.publisher.getValue().trim())
-        this.view.formfields.year.setValue(this.view.formfields.year.getValue().trim())
+        this.view.formfields.cost.setValue(this.view.formfields.cost.getValue().trim())
+        this.view.formfields.count.setValue(this.view.formfields.count.getValue().trim())
+        this.view.formfields.warranty.setValue(this.view.formfields.warranty.getValue().trim())
 
         // проверка длины isbn
         if (this.view.formfields.ISBN.getValue().length > 13) {
