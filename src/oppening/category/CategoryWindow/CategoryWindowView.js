@@ -2,7 +2,7 @@ import { ABSTRACT_WINDOW_TYPE } from './CAbstractWindow.js';
 
 // возвращает webix конфигурацию окна для работы с сущностью книги
 export default function AbstractWindowView(type) {
-    let headText = 'Книга' // текст заголовка модального окна
+    let headText = 'Категория' // текст заголовка модального окна
 
     switch (type) {
         case ABSTRACT_WINDOW_TYPE.create:

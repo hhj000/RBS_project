@@ -13,7 +13,7 @@ export class CCategoryTab {
     constructor() {
         this.refreshControlls       // функция обновления элементов управления в header'е
         this.view                   // объект для быстрого доступа к представлениям
-        this.window                 // экземпляр окна для работы с книгами
+        this.window                 // экземпляр окна для работы с товарами
         this.updateEventsDatatable  // функция обновления таблицы событий
         this.names                  // массив сотрудников в сабменю
     }
@@ -133,7 +133,7 @@ export class CCategoryTab {
 
                 // проверка статуса книги
                 if (category.status === CATEGORY_STATUS.available) {
-                    webix.message('Книга не выдана')
+                    webix.message('Товар не выдан')
                     return
                 }
 
@@ -164,7 +164,7 @@ export class CCategoryTab {
             return
         }
 
-        // проверка статуса книги
+        // проверка статуса товара
         if (category.status === CATEGORY_STATUS.notAvailable) {
             webix.message('Книга уже выдана')
             return
@@ -302,7 +302,7 @@ export class CCategoryTab {
             }
             // проверка выданности книги
             if (category.status === CATEGORY_STATUS.notAvailable) {
-                webix.message('Нельзя удалить выданную книгу')
+                webix.message('Нельзя удалить выданный товар')
                 return
             }
 

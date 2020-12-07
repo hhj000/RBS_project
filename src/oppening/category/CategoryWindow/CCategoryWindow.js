@@ -1,8 +1,8 @@
-import AbstractWindowView from './AbstractWindowView.js'
-import abstractModel from './../../../models/abstractModel.js'
+import CategoryWindowView from './CategoryWindowView.js'
+import categoryModel from './../../../models/categoryModel.js'
 
 // компонент окна для работы с сущностью книги
-export class CAbstractWindow {
+export class CCategoryWindow {
     constructor() {
         this.view       // объект для быстрого доступа к представлениям
         this.type       // тип текущего отображения окна
@@ -16,25 +16,25 @@ export class CAbstractWindow {
 
     // метод получения webix конфигурации компонента
     config() {
-        return AbstractWindowView()
+        return CategoryWindowView()
     }
 
     // метод инициализации обработчиков событий компонента
     attachEvents() {
         // инициализация используемых представлений
         this.view = {
-            window: $$('abstractWindow'),
-            windowLabel: $$('abstractWindowLabel'),
-            windowCancelBtn: $$('abstractWindowCancelBtn'),
-            windowConfirmBtn: $$('abstractWindowConfirmBtn'),
-            form: $$('abstractWindowForm'),
+            window: $$('categoryWindow'),
+            windowLabel: $$('categoryWindowLabel'),
+            windowCancelBtn: $$('categoryWindowCancelBtn'),
+            windowConfirmBtn: $$('categoryWindowConfirmBtn'),
+            form: $$('categoryWindowForm'),
             formfields: {
-                ISBN: $$('abstractWindowFormISBN'),
-                name: $$('abstractWindowFormName'),
-                author: $$('abstractWindowFormAuthor'),
-                publisher: $$('abstractWindowFormPublisher'),
-                status: $$('abstractWindowFormStatus'),
-                year: $$('abstractWindowFormYear'),
+                ISBN: $$('categoryWindowFormISBN'),
+                name: $$('categoryWindowFormName'),
+            //    cost: $$('categoryWindowFormAuthor'),
+            //    count: $$('categoryWindowFormPublisher'),
+            //    status: $$('categoryWindowFormStatus'),
+            //    warranty: $$('categoryWindowFormYear'),
             }
         }
 
@@ -52,20 +52,20 @@ export class CAbstractWindow {
             }
 
             switch (this.type) {
-                case ABSTRACT_WINDOW_TYPE.create:
-                    abstractModel.createAbstract(this.fetch()).then(() => {
+                case CATEGORY_WINDOW_TYPE.create:
+                    categoryModel.createCategory(this.fetch()).then(() => {
                         this.onChange()
                         this.hide()
                     })
                     break;
-                case ABSTRACT_WINDOW_TYPE.update:
-                    abstractModel.updateAbstract(this.fetch()).then(() => {
+                case CATEGORY_WINDOW_TYPE.update:
+                    categoryModel.updateCategory(this.fetch()).then(() => {
                         this.onChange()
                         this.hide()
                     })
                     break;
-                case ABSTRACT_WINDOW_TYPE.delete:
-                    abstractModel.deleteAbstract(this.fetch()).then(() => {
+                case CATEGORY_WINDOW_TYPE.delete:
+                    categoryModel.deleteCategory(this.fetch()).then(() => {
                         this.onChange()
                         this.hide()
                     })
@@ -89,22 +89,22 @@ export class CAbstractWindow {
     // метод отображения окна
     show(type) {
         switch (type) {
-            case ABSTRACT_WINDOW_TYPE.create:
+            case CATEGORY_WINDOW_TYPE.create:
                 this.view.windowLabel.setHTML('Добавление книги')
                 this.view.formfields.status.hide()
                 this.view.window.resize()
                 break;
-            case ABSTRACT_WINDOW_TYPE.update:
+            case CATEGORY_WINDOW_TYPE.update:
                 this.view.windowLabel.setHTML('Редактирование книги')
                 break;
-            case ABSTRACT_WINDOW_TYPE.delete:
+            case CATEGORY_WINDOW_TYPE.delete:
                 this.view.windowLabel.setHTML('Удаление книги')
                 this.view.formfields.ISBN.disable()
                 this.view.formfields.name.disable()
-                this.view.formfields.author.disable()
-                this.view.formfields.publisher.disable()
-                this.view.formfields.status.disable()
-                this.view.formfields.year.disable()
+            //    this.view.formfields.cost.disable()
+            //    this.view.formfields.count.disable()
+            //    this.view.formfields.status.disable()
+            //    this.view.formfields.warranty.disable()
                 this.view.window.resize()
                 break;
             default:
@@ -139,9 +139,9 @@ export class CAbstractWindow {
         this.view.formfields.ISBN.setValue(this.view.formfields.ISBN.getValue().trim())
         this.view.formfields.ISBN.setValue(this.view.formfields.ISBN.getValue().replace(/-/g, ''))
         this.view.formfields.name.setValue(this.view.formfields.name.getValue().trim())
-        this.view.formfields.author.setValue(this.view.formfields.author.getValue().trim())
-        this.view.formfields.publisher.setValue(this.view.formfields.publisher.getValue().trim())
-        this.view.formfields.year.setValue(this.view.formfields.year.getValue().trim())
+    //    this.view.formfields.cost.setValue(this.view.formfields.cost.getValue().trim())
+    //    this.view.formfields.count.setValue(this.view.formfields.count.getValue().trim())
+     //   this.view.formfields.warranty.setValue(this.view.formfields.warranty.getValue().trim())
 
         // проверка длины isbn
         if (this.view.formfields.ISBN.getValue().length > 13) {
@@ -156,8 +156,8 @@ export class CAbstractWindow {
     }
 }
 
-// типы отображения модального окна для работы с сущностью книги
-export const ABSTRACT_WINDOW_TYPE = {
+// типы отображения модального окна для работы с сущностью категории
+export const CATEGORY_WINDOW_TYPE = {
     create: 'CREATE',
     update: 'UPDATE',
     delete: 'DELETe',
